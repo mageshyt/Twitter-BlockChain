@@ -5,14 +5,15 @@ import NavOptions from './NavOptions'
 import styled from 'styled-components'
 import { navItems } from '../assets/NaviItems-data'
 import { GiFeather } from 'react-icons/gi'
+import Link from 'next/link'
 const styles = {
-  wrapper: 'flex-[0.7] px-4 lg:px-8  flex-col ',
-  TwitterContainer: 'text-3xl m-4 text-sky-400',
-  NavContainer: 'flex-1',
+  wrapper: 'flex-[0.7]   px-4 lg:px-8  flex flex-col  ',
+  TwitterContainerStyle: 'text-3xl m-4 text-sky-400',
+  NavContainer: 'flex-1  ',
   MintBtn:
     'text-white bg-sky-500 h-[50px] cursor-pointer p-2 hover:bg-sky-400 rounded-full flex justify-center items-center',
-  profileDetails: 'flex flex-col',
-  RightProfileContainer: 'flex hidden',
+  profileDetails: 'flex space-x-2 ',
+  RightProfileContainer: 'flex mb-2',
 }
 
 const SliderBar = () => {
@@ -20,10 +21,13 @@ const SliderBar = () => {
   const [Active, setActive] = useState('Home')
   return (
     <Wrapper className={styles.wrapper}>
-      <TwitterContainer className={styles.TwitterContainer}>
-        <VscTwitter />
+      <TwitterContainer className={styles.TwitterContainerStyle}>
+        <Link href="/">
+          <VscTwitter className={'cursor-pointer'} />
+        </Link>
       </TwitterContainer>
       {/* // nav container */}
+
       <NavContainer className={styles.NavContainer}>
         {navItems.map((item) => (
           <NavOptions
@@ -49,18 +53,28 @@ const SliderBar = () => {
       </NavContainer>
 
       {/* Profile session */}
-      <ProfileContainer className={styles.ProfileContainer}>
+      <ProfileContainer className={styles.ProfileContainerStyle}>
         {/* left profile */}
         <div></div>
         {/* right profile */}
         <div className={styles.RightProfileContainer}>
           {/* Details */}
           <div className={styles.profileDetails}>
-            <span className="text-xl font-medium">MageshYT</span>
-            <span className="text-xl text-gray-400">@0x9a9...054D8</span>
+            {/* logo */}
+            <div>
+              <img
+                src="/logo.webp"
+                className="visible mb-2 h-12 w-12 rounded-full border-2  border-sky-400 md:hidden"
+                alt=""
+              />
+            </div>
+            <div className="hidden flex-col md:flex">
+              <span className="text-lg font-medium">MageshYT</span>
+              <span className="text-lg text-gray-400">@0x9a9...054D8</span>
+            </div>
             {/* More container */}
           </div>
-          <div>
+          <div className="hidden flex-col md:flex">
             <FiMoreHorizontal />
           </div>
         </div>

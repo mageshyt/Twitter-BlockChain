@@ -43,7 +43,7 @@ const Post = ({
       <div className={style.postMain}>
         <div className={style.headerDetails}>
           {/* name */}
-          <span lassName={style.name}>{displayName}</span>
+          <span className={style.name}>{displayName}</span>
           {/* if the the image is nft then put check mark */}
           {!isProfileImageNft && (
             <span className={style.verified}>

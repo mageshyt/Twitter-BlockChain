@@ -1,7 +1,7 @@
 // import type { NextPage } from 'next'
 import Head from 'next/head'
 import FeedSession from '../components/Home/FeedSession'
-import SliderBar from '../components/SlideBar'
+import SliderBar from '../components/SideBar'
 import Widgets from '../components/Widgets'
 const Home = () => {
   return (

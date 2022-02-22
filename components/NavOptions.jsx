@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import React from 'react'
 
 const styles = {
@@ -13,9 +14,15 @@ const NavOptions = ({
   IconFill,
   redirect,
 }) => {
+  const router = useRouter()
   return (
     <div
-      onClick={() => setSelected(name)}
+      onClick={() => {
+        setSelected(name)
+        if (redirect) {
+          router.push(redirect)
+        }
+      }}
       className={
         isActive === name ? `${styles.wrapper} bg-[#333c45]` : styles.wrapper
       }

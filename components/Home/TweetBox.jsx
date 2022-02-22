@@ -11,7 +11,7 @@ const style = {
   inputField: `w-full h-full outline-none bg-transparent text-lg`,
   formLowerContainer: `flex`,
   iconsContainer: `text-[#1d9bf0] flex flex-1 items-center`,
-  icon: `mr-2`,
+  icon: `mr-2 cursor-pointer text-xl`,
   submitGeneral: `px-6 py-2 rounded-3xl font-bold`,
   inactiveSubmit: `bg-[#196195] text-[#95999e]`,
   activeSubmit: `bg-[#1d9bf0] text-white`,
