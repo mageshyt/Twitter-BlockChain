@@ -1,22 +1,18 @@
 import React, { useState } from 'react'
-import { RiHome7Line, RiHome7Fill, RiFileList2Fill } from 'react-icons/ri'
-import { BiHash } from 'react-icons/bi'
 import { FiBell, FiMoreHorizontal } from 'react-icons/fi'
-import { HiOutlineMail, HiMail } from 'react-icons/hi'
-import { FaRegListAlt, FaHashtag, FaBell } from 'react-icons/fa'
 import { VscTwitter } from 'react-icons/vsc'
-import { AiOutlineHome } from 'react-icons/ai'
 import NavOptions from './NavOptions'
 import styled from 'styled-components'
 import { navItems } from '../assets/NaviItems-data'
+import { GiFeather } from 'react-icons/gi'
 const styles = {
-  wrapper: 'flex-[0.7] px-8 flex flex-col',
-  TwitterContainer: 'text-3xl m-4',
+  wrapper: 'flex-[0.7] px-4 lg:px-8  flex-col ',
+  TwitterContainer: 'text-3xl m-4 text-sky-400',
   NavContainer: 'flex-1',
   MintBtn:
-    'text-white bg-blue-500 h-[50px] cursor-pointer p-2 hover:bg-blue-600 rounded-full flex justify-center items-center',
+    'text-white bg-sky-500 h-[50px] cursor-pointer p-2 hover:bg-sky-400 rounded-full flex justify-center items-center',
   profileDetails: 'flex flex-col',
-  RightProfileContainer: 'flex',
+  RightProfileContainer: 'flex hidden',
 }
 
 const SliderBar = () => {
@@ -41,7 +37,15 @@ const SliderBar = () => {
           />
         ))}
         {/*  // !Mint btn */}
-        <MintButton className={styles.MintBtn}> Mint</MintButton>
+        <MintButton className={`${styles.MintBtn} hidden md:flex`}>
+          Mint
+        </MintButton>
+
+        <MintButton
+          className={`flex h-12 w-12 items-center justify-center rounded-full bg-sky-500  text-xl md:hidden `}
+        >
+          <GiFeather className="text-white" />
+        </MintButton>
       </NavContainer>
 
       {/* Profile session */}
