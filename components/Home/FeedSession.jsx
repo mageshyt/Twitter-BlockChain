@@ -2,6 +2,8 @@ import React from 'react'
 import { BsStars } from 'react-icons/bs'
 import TweetBox from './TweetBox'
 import Post from './Post'
+
+
 import { tweet } from '../../lib/dummyData'
 const style = {
   wrapper: `w-full border-r border-l  border-[#38444d] overflow-y-scroll`,

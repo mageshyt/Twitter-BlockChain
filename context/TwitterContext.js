@@ -6,7 +6,7 @@ export const TwitterContext = createContext()
 // ! providers
 export const TwitterProvider = ({ children }) => {
   // ! app status
-  const [appStatus, SetAppStatus] = useState('not connected')
+  const [appStatus, SetAppStatus] = useState('notConnected')
   // ! current Account
   const [currentAccount, SetCurrentAccount] = useState('')
 
@@ -14,15 +14,26 @@ export const TwitterProvider = ({ children }) => {
   const router = useRouter()
   useEffect(() => {
     checkIsWalletConnected()
-  }, [])
+  }, [currentAccount])
+  // ! create account
+  const createUserAccount = async (userWalletAddress = currentAccount) => {
+    if (window.ethereum) return SetAppStatus('noMetamask')
+    try {
+      const userDoc={
+        
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
   // ! for checking if our wallet is connected or not
   const checkIsWalletConnected = async () => {
-    if (!window.ethereum) return
+    if (!window.ethereum) return SetAppStatus('noMetaMask')
     try {
       const addressArray = await window.ethereum.request({
         method: 'eth_accounts',
       })
-      if (addressArray.result.length > 0) {
+      if (addressArray.length > 0) {
         // you are connected
         SetAppStatus('connected')
         SetCurrentAccount(addressArray.result[0]) // ! by default we will connect to first account`
@@ -36,10 +47,10 @@ export const TwitterProvider = ({ children }) => {
   }
   // ! for connecting to the wallet
   const connectToWallet = async () => {
-    if (!windows.ethereum) return
+    if (!window.ethereum) return SetAppStatus('noMetaMask')
     try {
       SetAppStatus('loading')
-      const addressArray = await windows.ethereum.request({
+      const addressArray = await window.ethereum.request({
         method: 'eth_requestAccounts',
       })
       if (addressArray.length > 0) {

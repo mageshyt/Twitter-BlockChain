@@ -4,6 +4,7 @@ import { FiShare } from 'react-icons/fi'
 import { format } from 'timeago.js'
 import { FaRegComment, FaRetweet } from 'react-icons/fa'
 import { AiOutlineHeart } from 'react-icons/ai'
+
 const style = {
   wrapper: `flex p-3 border-b border-[#38444d]`,
   profileImage: `rounded-full  h-[40px] w-[40px] object-cover`,
@@ -25,6 +26,8 @@ const Post = ({
   timestamp,
   isProfileImageNft,
 }) => {
+  // ! for like
+  const [liked, setLiked] = React.useState(false)
   return (
     <div className={style.wrapper}>
       <div>
@@ -78,7 +81,7 @@ const Post = ({
           <div
             className={`${style.footerIcon} cursor-pointer  hover:bg-[#39243c]  hover:text-pink-400 `}
           >
-            <AiOutlineHeart />
+            <AiOutlineHeart onClick={() => setLiked(!liked)} />
           </div>
           {/* share */}
           <div
