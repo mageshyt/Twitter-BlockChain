@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FiBell, FiMoreHorizontal } from 'react-icons/fi'
 import { VscTwitter } from 'react-icons/vsc'
 import NavOptions from './NavOptions'
@@ -6,6 +6,9 @@ import styled from 'styled-components'
 import { navItems } from '../assets/NaviItems-data'
 import { GiFeather } from 'react-icons/gi'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { TwitterContext } from '../context/TwitterContext'
+
 const styles = {
   wrapper: 'flex-[0.7]   px-4 lg:px-8  flex flex-col  ',
   TwitterContainerStyle: 'text-3xl m-4 text-sky-400',
@@ -19,6 +22,10 @@ const styles = {
 const SliderBar = () => {
   // ! for active state
   const [Active, setActive] = useState('Home')
+  const router = useRouter()
+
+  const { currentAccount, currentUser } = useContext(TwitterContext)
+
   return (
     <Wrapper className={styles.wrapper}>
       <TwitterContainer className={styles.TwitterContainerStyle}>
@@ -41,7 +48,12 @@ const SliderBar = () => {
           />
         ))}
         {/*  // !Mint btn */}
-        <MintButton className={`${styles.MintBtn} hidden md:flex`}>
+        <MintButton
+          onClick={() =>
+            router.push(`${router.pathname}/?mint=${currentAccount}`)
+          }
+          className={`${styles.MintBtn} hidden md:flex`}
+        >
           Mint
         </MintButton>
 
@@ -61,16 +73,19 @@ const SliderBar = () => {
           {/* Details */}
           <div className={styles.profileDetails}>
             {/* logo */}
-            <div>
+            <div className={'mr-4'}>
               <img
-                src="/logo.webp"
+                src={currentUser.profileImage}
                 className="visible mb-2 h-12 w-12 rounded-full border-2  border-sky-400 md:hidden"
                 alt=""
               />
             </div>
             <div className="hidden flex-col md:flex">
-              <span className="text-lg font-medium">MageshYT</span>
-              <span className="text-lg text-gray-400">@0x9a9...054D8</span>
+              <span className="text-lg font-medium">{currentUser.name}</span>
+              <span className="text-lg text-gray-400">
+                @{currentAccount.slice(0, 4)}...
+                {currentAccount.slice(37)}
+              </span>
             </div>
             {/* More container */}
           </div>

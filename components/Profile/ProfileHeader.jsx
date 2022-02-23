@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useContext } from 'react'
 import { BsArrowLeftShort } from 'react-icons/bs'
+import { TwitterContext } from '../../context/TwitterContext'
 
 const style = {
   wrapper: `border-[#38444d] border-b`,
@@ -20,8 +21,7 @@ const style = {
 }
 const ProfileHeader = () => {
   const router = useRouter()
-  const isProfileImageNft = false
-  const currentAccount = '0x9a9e6793880041ca39122C97260fBb70B7C254D8'
+  const { currentAccount, currentUser, tweets } = useContext(TwitterContext)
   return (
     <div className={style.wrapper}>
       <div className={style.header}>
@@ -31,8 +31,8 @@ const ProfileHeader = () => {
         {/* details */}
         <div className={style.details}>
           {/* name */}
-          <div className={style.primary}>Magesh</div>
-          <div className={style.secondary}>8 Tweets</div>
+          <div className={style.primary}>{currentUser.name}</div>
+          <div className={style.secondary}> {tweets?.length} Tweets</div>
         </div>
       </div>
       {/* bg image */}
@@ -45,12 +45,16 @@ const ProfileHeader = () => {
       </div>
       <div className={style.profileImageContainer}>
         <div
-          className={isProfileImageNft ? 'hex' : style.profileImageContainer}
+          className={
+            currentUser.isProfileImageNft ? 'hex' : style.profileImageContainer
+          }
         >
           <img
             src="/logo.webp"
             className={
-              isProfileImageNft ? style.profileImageNft : style.profileImage
+              currentUser.isProfileImageNft
+                ? style.profileImageNft
+                : style.profileImage
             }
           />
         </div>
@@ -58,7 +62,7 @@ const ProfileHeader = () => {
       {/* Deails-2 */}
       <div className={style.details}>
         {/* name */}
-        <div className={style.primary}>Magesh</div>
+        <div className={style.primary}>{currentUser.name}</div>
         <div className={style.secondary}>
           {currentAccount && (
             <>

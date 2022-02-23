@@ -31,8 +31,7 @@ export const TweetSchema = {
       type: 'array',
       of: [
         {
-          type: 'reference',
-          to: [{ type: 'comments' }],
+          type: 'string',
         },
       ],
     },

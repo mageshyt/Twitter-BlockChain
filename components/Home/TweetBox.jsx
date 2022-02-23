@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { BsCardImage, BsEmojiSmile } from 'react-icons/bs'
 import { RiFileGifLine, RiBarChartHorizontalFill } from 'react-icons/ri'
 import { IoMdCalendar } from 'react-icons/io'
 import { MdOutlineLocationOn } from 'react-icons/md'
+import { client } from '../../lib/clinet'
+import { TwitterContext } from '../../context/TwitterContext'
 const style = {
   wrapper: `px-4 flex flex-row border-b border-[#38444d] pb-4`,
   tweetBoxLeft: `mr-4  h-16`,
@@ -19,18 +21,62 @@ const style = {
 const TweetBox = () => {
   //! for tweetMessage
   const [tweetMessage, setTweetMessage] = React.useState('')
+  const { currentAccount, fetchTweets, tweets, currentUser } =
+    useContext(TwitterContext)
   //! for posting tweet
-  const posting = (event) => {
+  const posting = async (event) => {
     event.preventDefault()
-    console.log('posting')
+    // * if tweet doesn't exist then return it
+    if (!tweetMessage) return
+
+    // ! out tweet id
+    const tweetId = `${currentAccount}_${Date.now()}`
+    // ! out tweet
+    const tweetDoc = {
+      _type: 'tweets',
+      _id: tweetId,
+      tweet: tweetMessage,
+      likes: 0,
+      comments: [],
+      timestamp: new Date(Date.now()).toISOString(),
+      author: {
+        _key: tweetId,
+        _type: 'reference',
+        _ref: currentAccount,
+      },
+    }
+    // ! create the tweet if it not exist
+    await client.createIfNotExists(tweetDoc)
+
+    // ! now we will add this tweet in out user schema
+    await client
+      .patch(currentAccount)
+      .setIfMissing({ tweets: [] })
+      .insert('after', 'tweets[-1]', [
+        {
+          _key: tweetId,
+          _ref: tweetId,
+          _type: 'reference',
+        },
+      ])
+      .commit()
+    fetchTweets()
+    setTweetMessage('')
   }
-  console.log('tweetMessage', tweetMessage)
   return (
     <div className={`${style.wrapper}`}>
       {/* Left side */}
       <div className={`${style.tweetBoxLeft}`}>
         {/* logo */}
-        <img src="/logo.webp" alt="" className={style.profileImage} />
+        <img
+          src={currentUser.profileImage}
+          alt="user profile image"
+          className={
+            currentUser.isProfileImageNft
+              ? `${style.profileImage} smallHex`
+              : style.profileImage
+          }
+        />
       </div>
       {/* Right side */}
       <div className={`${style.tweetBoxRight}`}>

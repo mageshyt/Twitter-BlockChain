@@ -2,6 +2,7 @@ import React from 'react'
 import { BiSearch } from 'react-icons/bi'
 import { news, tweet, whoToFollow } from '../lib/dummyData'
 import styled from 'styled-components'
+
 const style = {
   wrapper: ` w-[600px] overflow-y-scroll p-4  hidden lg:block`,
   searchBar: `flex items-center bg-[#243340] p-2 rounded-3xl`,
@@ -26,7 +27,6 @@ const style = {
 }
 const Widgets = () => {
   const [search, setSearch] = React.useState('')
-  console.log(search)
   return (
     <div className={style.wrapper}>
       {/* search bar */}

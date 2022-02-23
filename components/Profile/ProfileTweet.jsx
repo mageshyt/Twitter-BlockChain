@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { TwitterContext } from '../../context/TwitterContext'
 import { tweet } from '../../lib/dummyData'
 import Post from '../Home/Post'
 const style = {
@@ -7,17 +8,25 @@ const style = {
   headerTitle: `text-xl font-bold`,
 }
 const ProfileTweet = () => {
+  const { tweets } = useContext(TwitterContext)
   return (
     <div className={style.wrapper}>
-      {tweet?.map((tweet, index) => {
+      {tweets?.map((tweet, index) => {
         return (
           <Post
             key={index}
-            displayName={tweet.displayName}
-            username={tweet.username}
-            avatar={tweet.avatar}
-            text={tweet.text}
-            isProfileImageNft={tweet.isProfileImage}
+            displayName={
+              tweet.author.name === 'Unnamed'
+                ? `${tweet.author.walletAddress.slice(
+                    0,
+                    4
+                  )}...${tweet.author.walletAddress.slice(41)}`
+                : tweet.author.name
+            }
+            username={tweet.author.walletAddress}
+            text={tweet.tweet}
+            avatar="/logo.webp"
+            isProfileImageNft={tweet.author.isProfileImageNft}
             timestamp={tweet.timestamp}
           />
         )

@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { BsStars } from 'react-icons/bs'
 import TweetBox from './TweetBox'
 import Post from './Post'
 
-
 import { tweet } from '../../lib/dummyData'
+import { TwitterContext } from '../../context/TwitterContext'
 const style = {
   wrapper: `w-full border-r border-l  border-[#38444d] overflow-y-scroll`,
   header: `sticky top-0 bg-[#15202b] z-10 p-4 flex justify-between items-center`,
@@ -12,6 +12,7 @@ const style = {
 }
 
 const FeedSession = () => {
+  const { tweets } = useContext(TwitterContext)
   return (
     <div className={`${style.wrapper}`}>
       <div className={style.header}>
@@ -21,14 +22,21 @@ const FeedSession = () => {
       {/* Tweet box */}
       <TweetBox />
       {/*  render the tweet */}
-      {tweet.map((tweet, index) => (
+      {tweets.map((tweet, index) => (
         <Post
           key={index}
-          displayName={tweet.displayName}
-          username={tweet.username}
-          avatar={tweet.avatar}
-          text={tweet.text}
-          isProfileImageNft={tweet.isProfileImage}
+          displayName={
+            tweet.author.name === 'Unnamed'
+              ? `${tweet.author.walletAddress.slice(
+                  0,
+                  4
+                )}...${tweet.author.walletAddress.slice(41)}`
+              : tweet.author.name
+          }
+          username={tweet.author.walletAddress}
+          text={tweet.tweet}
+          avatar="/logo.webp"
+          isProfileImageNft={tweet.author.isProfileImageNft}
           timestamp={tweet.timestamp}
         />
       ))}

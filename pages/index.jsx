@@ -15,8 +15,8 @@ const style = {
   loginContent: `text-3xl font-bold text-center mt-24`,
 }
 const Home = () => {
-  const { appStatus, connectToWallet } = useContext(TwitterContext)
-  console.log(appStatus)
+  const { appStatus, connectToWallet, currentAccount } =
+    useContext(TwitterContext)
   const app = (status = appStatus) => {
     switch ((status = appStatus)) {
       case 'connected':
