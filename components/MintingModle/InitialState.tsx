@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { GiEarthAmerica } from 'react-icons/gi'
 
 const style = {
-  wrapper: `h-[20rem] w-[35rem] text-white bg-[#15202b] rounded-3xl p-10 flex flex-col`,
+  wrapper: `h-[21rem] w-[25rem]  md:w-[35rem] text-white bg-[#15202b] rounded-3xl p-10 flex flex-col`,
   inputFieldsContainer: `flex-1`,
   inputContainer: `mb-4`,
   fileInput: `hidden`,

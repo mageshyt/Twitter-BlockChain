@@ -35,7 +35,7 @@ const FeedSession = () => {
           }
           username={tweet.author.walletAddress}
           text={tweet.tweet}
-          avatar="/logo.webp"
+          avatar={tweet.author.profileImage}
           isProfileImageNft={tweet.author.isProfileImageNft}
           timestamp={tweet.timestamp}
         />

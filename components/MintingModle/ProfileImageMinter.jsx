@@ -1,28 +1,15 @@
 import React from 'react'
 import { useState, useContext } from 'react'
-import { useRouter } from 'next/router'
-import { RiHome7Line, RiHome7Fill, RiFileList2Fill } from 'react-icons/ri'
-import { BiHash } from 'react-icons/bi'
-import { FiBell, FiMoreHorizontal } from 'react-icons/fi'
-import { HiOutlineMail, HiMail } from 'react-icons/hi'
-import { FaRegListAlt, FaHashtag, FaBell } from 'react-icons/fa'
-import { CgMoreO } from 'react-icons/cg'
-import { VscTwitter } from 'react-icons/vsc'
-import Modal from 'react-modal'
-import { pinFileToIPFS } from '../../lib/pinata'
+import { pinFileToIPFS, pinJSONToIPFS } from '../../lib/pinata'
 import { client } from '../../lib/clinet'
-import {
-  BsBookmark,
-  BsBookmarkFill,
-  BsPerson,
-  BsPersonFill,
-} from 'react-icons/bs'
+import { contractABI, contractAddress } from '../../lib/contracts'
+import { ethers } from 'ethers'
 import { TwitterContext, TwitterProvider } from '../../context/TwitterContext'
 import InitialState from '../MintingModle/InitialState'
 import LoadingState from '../MintingModle/LoadingState'
 import FinishedState from '../MintingModle/FinishedState'
 const style = {
-  wrapper: `flex-[0.7] px-8 flex flex-col`,
+  wrapper: `flex-[0.7] px-8  flex flex-col`,
   twitterIconContainer: `text-3xl m-4`,
   tweetButton: `bg-[#1d9bf0] hover:bg-[#1b8cd8] flex items-center justify-center font-bold rounded-3xl h-[50px] mt-[20px] cursor-pointer`,
   navContainer: `flex-1`,
@@ -35,8 +22,27 @@ const style = {
   handle: `text-[#8899a6]`,
   moreContainer: `flex items-center mr-2`,
 }
+
+let metamask
+if (typeof window !== 'undefined') {
+  metamask = window.ethereum
+}
+const getEthereumContract = async () => {
+  // ! if metamast is not exist then return it
+  if (!metamask) return
+  const provider = new ethers.providers.Web3Provider(metamask)
+  const signer = provider.getSigner()
+  // ! creating new contract
+  const transactionContract = new ethers.Contract(
+    contractAddress,
+    contractABI,
+    signer
+  )
+
+  return transactionContract
+}
 const ProfileImageMinter = () => {
-  const { SetAppStatus } = useContext(TwitterContext)
+  const { SetAppStatus, currentAccount } = useContext(TwitterContext)
   // ! status
   const [status, setStatus] = useState('initial')
   //! for tracking name
@@ -52,13 +58,43 @@ const ProfileImageMinter = () => {
     const pinataMetaData = {
       name: `${name} - ${description}`,
     }
-    console.log(pinataMetaData, profileImage, description)
-    pinFileToIPFS(profileImage, pinataMetaData)
+    const ipfsImageHash = await pinFileToIPFS(profileImage, pinataMetaData)
 
     // ! setting profile image in sanity
-    await client.patch()
-    // console.log()
-    setStatus('finished')
+  await client
+    .patch(currentAccount)
+    .set({ profileImage: ipfsImageHash })
+    .set({ isProfileImageNft: true })
+    .commit()
+
+    const imageMetaData = {
+      name: name,
+      description: description,
+      image: `ipfs://${ipfsImageHash}`,
+    }
+    console.log(imageMetaData)
+
+    const ipfsJsonHash = await pinJSONToIPFS(imageMetaData)
+
+    const contract = await getEthereumContract()
+
+    const transactionParameters = {
+      to: contractAddress,
+      from: currentAccount,
+      data: await contract.mint(currentAccount, `ipfs://${ipfsJsonHash}`),
+    }
+
+    try {
+      await metamask.request({
+        method: 'eth_sendTransaction',
+        params: [transactionParameters],
+      })
+
+      setStatus('finished')
+    } catch (error) {
+      console.log(error)
+      setStatus('finished')
+    }
   }
   const modalChildren = (modalState = status) => {
     switch (modalState) {

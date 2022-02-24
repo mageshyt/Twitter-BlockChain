@@ -50,7 +50,7 @@ const ProfileHeader = () => {
           }
         >
           <img
-            src="/logo.webp"
+            src={currentUser.profileImage}
             className={
               currentUser.isProfileImageNft
                 ? style.profileImageNft
