@@ -5,10 +5,12 @@ import NavOptions from './NavOptions'
 import styled from 'styled-components'
 import { navItems } from '../assets/NaviItems-data'
 import { GiFeather } from 'react-icons/gi'
-import Link from 'next/link'
+
 import { useRouter } from 'next/router'
 import { TwitterContext } from '../context/TwitterContext'
-
+import Modal from 'react-modal'
+import ProfileImageMinter from '../components/MintingModle/ProfileImageMinter'
+import { customStyles } from '../lib/ModalStyle'
 const styles = {
   wrapper: 'flex-[0.7]   px-4 lg:px-8  flex flex-col  ',
   TwitterContainerStyle: 'text-3xl m-4 text-sky-400',
@@ -23,15 +25,12 @@ const SliderBar = () => {
   // ! for active state
   const [Active, setActive] = useState('Home')
   const router = useRouter()
-
   const { currentAccount, currentUser } = useContext(TwitterContext)
 
   return (
     <Wrapper className={styles.wrapper}>
       <TwitterContainer className={styles.TwitterContainerStyle}>
-        <Link href="/">
-          <VscTwitter className={'cursor-pointer'} />
-        </Link>
+        <VscTwitter className={'cursor-pointer'} />
       </TwitterContainer>
       {/* // nav container */}
 
@@ -50,7 +49,7 @@ const SliderBar = () => {
         {/*  // !Mint btn */}
         <MintButton
           onClick={() =>
-            router.push(`${router.pathname}/?mint=${currentAccount}`)
+            router.push(`/${router.pathname}?mint=${currentAccount}`)
           }
           className={`${styles.MintBtn} hidden md:flex`}
         >
@@ -58,6 +57,9 @@ const SliderBar = () => {
         </MintButton>
 
         <MintButton
+          onClick={() => {
+            router.push(`${router.pathname}/?mint=${currentAccount}`)
+          }}
           className={`flex h-12 w-12 items-center justify-center rounded-full bg-sky-500  text-xl md:hidden `}
         >
           <GiFeather className="text-white" />
@@ -94,6 +96,14 @@ const SliderBar = () => {
           </div>
         </div>
       </ProfileContainer>
+      <Modal
+        isOpen={Boolean(router.query.mint)}
+        onRequestClose={() => router.back()}
+        style={customStyles}
+        ariaHideApp={false}
+      >
+        <ProfileImageMinter />
+      </Modal>
     </Wrapper>
   )
 }

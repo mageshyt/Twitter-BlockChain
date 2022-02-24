@@ -149,6 +149,7 @@ export const TwitterProvider = ({ children }) => {
         tweets,
         getCurrentUserDetails,
         currentUser,
+        SetAppStatus,
       }}
     >
       {children}

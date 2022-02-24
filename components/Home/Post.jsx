@@ -26,7 +26,6 @@ const Post = ({
   timestamp,
   isProfileImageNft,
 }) => {
-  console.log(avatar)
   // ! for like
   const [liked, setLiked] = React.useState(false)
   return (
